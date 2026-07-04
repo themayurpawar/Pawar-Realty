@@ -1,0 +1,996 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vanantara by Pawar Realty | Upvan Lake, Thane</title>
+<style>
+  :root{
+    --ivory:#F5F2EA;
+    --ivory-2:#EDE8DB;
+    --ink:#0F0D0B;
+    --ink-soft:#1C1917;
+    --gold:#AD8A4E;
+    --gold-light:#D9C293;
+    --gold-dim:#8B6F3C;
+    --stone:#8C8577;
+    --line: rgba(15,13,11,0.12);
+    --line-light: rgba(245,242,234,0.18);
+    --serif: 'Optima', 'Candara', 'Segoe UI', 'Century Gothic', ui-sans-serif, sans-serif;
+    --sans: 'Optima', 'Candara', 'Segoe UI', 'Century Gothic', ui-sans-serif, sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{
+    background:var(--ivory);
+    color:var(--ink);
+    font-family:var(--sans);
+    font-weight:300;
+    overflow-x:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  a{color:inherit;text-decoration:none;}
+  img{display:block;max-width:100%;}
+  ::selection{background:var(--gold);color:var(--ivory);}
+
+  .eyebrow{
+    font-family:var(--sans);
+    font-size:11px;
+    letter-spacing:0.32em;
+    text-transform:uppercase;
+    color:var(--gold-dim);
+    display:inline-flex;
+    align-items:center;
+    gap:12px;
+  }
+  .eyebrow::before{
+    content:'';
+    width:26px;height:1px;
+    background:var(--gold-dim);
+    display:inline-block;
+  }
+  .section-pad{padding:140px 8vw;}
+  @media (max-width:768px){ .section-pad{padding:90px 6vw;} }
+
+  h1,h2,h3{font-family:var(--serif);font-weight:400;letter-spacing:0.01em;}
+
+  /* ---------- NAV ---------- */
+  header{
+    position:fixed;top:0;left:0;width:100%;z-index:1000;
+    display:flex;align-items:center;justify-content:space-between;
+    padding:28px 8vw;
+    transition:background 0.5s ease, padding 0.5s ease, border-color .5s ease;
+    border-bottom:1px solid transparent;
+  }
+  header.scrolled{
+    background:rgba(15,13,11,0.92);
+    padding:18px 8vw;
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line-light);
+  }
+  .logo{
+    font-family:var(--serif);
+    font-size:22px;
+    letter-spacing:0.12em;
+    color:var(--ivory);
+    display:flex;flex-direction:column;line-height:1;
+  }
+  .logo span{
+    font-family:var(--sans);
+    font-size:9px;
+    letter-spacing:0.35em;
+    color:var(--gold-light);
+    margin-top:6px;
+    font-weight:400;
+  }
+  nav ul{list-style:none;display:flex;gap:44px;}
+  nav a{
+    font-size:12px;letter-spacing:0.15em;text-transform:uppercase;
+    color:var(--ivory);opacity:0.85;
+    position:relative;
+    transition:opacity .3s ease;
+  }
+  nav a:hover{opacity:1;color:var(--gold-light);}
+  .nav-toggle{display:none;color:var(--ivory);font-size:22px;cursor:pointer;background:none;border:none;}
+  @media (max-width:900px){
+    nav ul{display:none;}
+    .nav-toggle{display:block;}
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    position:relative;height:100vh;min-height:640px;
+    display:flex;align-items:flex-end;
+    overflow:hidden;background:var(--ink);
+  }
+  .hero-bg{
+    position:absolute;inset:-10% 0 0 0;height:120%;
+    background:
+      radial-gradient(ellipse at 50% 30%, rgba(70,140,200,0.14), transparent 60%),
+      linear-gradient(180deg, #0A0E14 0%, #0B0D10 45%, #050403 100%);
+    will-change:transform;
+  }
+  .hero-bg::before{
+    content:'';position:absolute;inset:0;
+    background-image:
+      repeating-linear-gradient(90deg, rgba(217,194,147,0.04) 0px, transparent 2px, transparent 68px),
+      linear-gradient(0deg, rgba(0,0,0,0.6), transparent 40%);
+    opacity:0.7;
+    z-index:1;
+  }
+  #heroCanvas{
+    position:absolute;inset:0;width:100%;height:100%;z-index:0;
+  }
+  .hero-lake{
+    position:absolute;left:0;right:0;bottom:0;height:38%;
+    background:linear-gradient(180deg, rgba(173,138,78,0.06), rgba(5,4,3,0.9));
+    will-change:transform;
+  }
+  .hero-lake::after{
+    content:'';position:absolute;inset:0;
+    background:repeating-linear-gradient(100deg, rgba(217,194,147,0.06) 0 1px, transparent 1px 40px);
+  }
+  .hero-content{
+    position:relative;z-index:5;padding:190px 8vw 100px;color:var(--ivory);width:100%;
+    box-sizing:border-box;
+  }
+  .hero-content .eyebrow{color:var(--gold-light);margin-bottom:26px;}
+  .hero-content .eyebrow::before{background:var(--gold-light);}
+  .hero h1{
+    font-size:clamp(40px,6vw,92px);
+    line-height:1.08;
+    max-width:22ch;
+    color:var(--ivory);
+    font-weight:300;
+  }
+  .hero h1 em{font-style:italic;color:var(--gold-light);}
+  .hero-sub{
+    margin-top:28px;max-width:520px;
+    font-size:16px;line-height:1.8;color:rgba(245,242,234,0.72);
+    font-weight:300;
+  }
+  .hero-meta{
+    display:flex;gap:56px;margin-top:56px;flex-wrap:wrap;
+  }
+  .hero-meta div{border-left:1px solid var(--line-light);padding-left:16px;}
+  .hero-meta b{display:block;font-family:var(--serif);font-size:24px;color:var(--gold-light);font-weight:400;}
+  .hero-meta span{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(245,242,234,0.55);}
+  .scroll-cue{
+    position:absolute;right:8vw;bottom:44px;z-index:5;
+    display:flex;flex-direction:column;align-items:center;gap:10px;
+    color:rgba(245,242,234,0.6);font-size:10px;letter-spacing:0.2em;text-transform:uppercase;
+  }
+  .scroll-cue .line{width:1px;height:50px;background:linear-gradient(180deg, var(--gold-light), transparent);animation:cueMove 2.2s ease-in-out infinite;}
+  @keyframes cueMove{0%{opacity:.2;transform:scaleY(0.4);transform-origin:top;}50%{opacity:1;transform:scaleY(1);}100%{opacity:.2;transform:scaleY(0.4);transform-origin:bottom;}}
+
+  /* ---------- INTRO / MAGNETIC TEXT ---------- */
+  .intro{background:var(--ivory);text-align:center;position:relative;}
+  .intro-inner{max-width:1100px;margin:0 auto;}
+  .magnetic-text{
+    font-family:var(--serif);
+    font-size:clamp(28px,4.4vw,58px);
+    line-height:1.35;font-weight:400;color:var(--ink-soft);
+    margin-top:46px;
+  }
+  .magnetic-text span{
+    display:inline-block;
+    transition:transform .12s ease-out, color .12s ease-out, opacity .12s ease-out;
+    will-change:transform;
+  }
+  .magnetic-text em{font-style:italic;color:var(--gold-dim);}
+
+  /* ---------- LOCATION ---------- */
+  .location{
+    background:var(--ink);color:var(--ivory);
+    display:grid;grid-template-columns:1fr 1fr;gap:0;
+    align-items:stretch;position:relative;
+  }
+  @media (max-width:900px){ .location{grid-template-columns:1fr;} }
+  .location-copy{padding:140px 6vw;display:flex;flex-direction:column;justify-content:center;}
+  .location-copy .eyebrow{color:var(--gold-light);}
+  .location-copy .eyebrow::before{background:var(--gold-light);}
+  .location-copy h2{font-size:clamp(32px,3.6vw,52px);margin-top:22px;max-width:11ch;color:var(--ivory);}
+  .location-copy p{margin-top:24px;max-width:46ch;line-height:1.9;color:rgba(245,242,234,0.7);font-size:15.5px;}
+  .location-list{margin-top:36px;display:flex;flex-direction:column;gap:14px;}
+  .location-list div{display:flex;justify-content:space-between;border-bottom:1px solid var(--line-light);padding-bottom:12px;font-size:13.5px;letter-spacing:0.03em;}
+  .location-list span:first-child{color:rgba(245,242,234,0.55);}
+  .location-list span:last-child{color:var(--gold-light);font-family:var(--serif);font-size:16px;}
+  .location-visual{position:relative;overflow:hidden;min-height:420px;}
+  .location-visual canvas{position:absolute;inset:0;width:100%;height:100%;}
+
+  /* ---------- ELEVATION (SIGNATURE) ---------- */
+  .elevation{
+    position:relative;background:var(--ivory);
+    padding:120px 8vw 0;
+  }
+  .elevation-head{max-width:640px;margin:0 auto 0;text-align:center;}
+  .elevation-head h2{font-size:clamp(32px,4vw,54px);margin-top:20px;}
+  .elevation-head p{margin-top:20px;color:var(--stone);line-height:1.8;font-size:15px;}
+  .elevation-stage{
+    height:280vh;position:relative;
+  }
+  .elevation-pin{
+    position:sticky;top:0;height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    overflow:hidden;
+  }
+  .elevation-pin canvas{max-height:86vh;}
+  .elevation-progress{
+    position:absolute;bottom:56px;left:50%;transform:translateX(-50%);
+    display:flex;align-items:center;gap:14px;
+    font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--stone);
+  }
+  .elevation-progress .bar{width:160px;height:1px;background:var(--line);position:relative;}
+  .elevation-progress .bar i{position:absolute;left:0;top:0;height:100%;background:var(--gold);width:0%;}
+
+  /* ---------- RESIDENCES ---------- */
+  .residences{background:var(--ivory-2);position:relative;}
+  .residences-head{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:24px;margin-bottom:70px;}
+  .residences-head h2{font-size:clamp(32px,4vw,52px);max-width:9ch;}
+  .residences-head p{max-width:360px;color:var(--stone);line-height:1.8;font-size:14.5px;}
+  .res-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;background:var(--line);}
+  @media (max-width:900px){ .res-grid{grid-template-columns:1fr;} }
+  .res-card{
+    background:var(--ivory-2);padding:52px 40px;position:relative;overflow:hidden;
+    transition:background .4s ease;
+  }
+  .res-card:hover{background:var(--ink);color:var(--ivory);}
+  .res-card:hover .res-num, .res-card:hover .res-line{color:var(--gold-light);border-color:var(--line-light);}
+  .res-num{font-family:var(--serif);font-size:13px;color:var(--gold-dim);}
+  .res-card h3{font-size:30px;margin-top:20px;}
+  .res-card .res-area{font-size:13px;color:var(--stone);margin-top:8px;letter-spacing:0.05em;}
+  .res-card p{margin-top:22px;font-size:14px;line-height:1.8;color:var(--stone);}
+  .res-card:hover p{color:rgba(245,242,234,0.68);}
+  .res-line{margin-top:28px;padding-top:18px;border-top:1px solid var(--line);font-size:11px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold-dim);transition:color .4s ease, border-color .4s ease;}
+
+  /* ---------- AMENITIES / PARALLAX GALLERY ---------- */
+  .amenities{background:var(--ink);color:var(--ivory);position:relative;}
+  .amenities .eyebrow{color:var(--gold-light);} .amenities .eyebrow::before{background:var(--gold-light);}
+  .amenities h2{color:var(--ivory);font-size:clamp(32px,4vw,52px);margin-top:20px;max-width:14ch;}
+  .amenity-grid{margin-top:70px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-light);}
+  @media (max-width:900px){ .amenity-grid{grid-template-columns:repeat(2,1fr);} }
+  .amenity{background:var(--ink);padding:44px 26px;text-align:center;}
+  .amenity svg{width:30px;height:30px;stroke:var(--gold-light);fill:none;stroke-width:1;margin:0 auto 20px;}
+  .amenity h4{font-family:var(--serif);font-size:18px;font-weight:400;color:var(--ivory);}
+  .amenity p{margin-top:8px;font-size:12px;color:rgba(245,242,234,0.5);line-height:1.6;}
+
+  .gallery{background:var(--ivory);position:relative;}
+  .gallery-grid{display:grid;grid-template-columns:1.3fr 1fr 1fr;grid-template-rows:280px 280px;gap:14px;margin-top:60px;}
+  @media (max-width:900px){ .gallery-grid{grid-template-columns:1fr;grid-template-rows:auto;} }
+  .gallery-item{position:relative;overflow:hidden;border-radius:2px;}
+  .gallery-item .parallax-img{position:absolute;inset:-15% 0;width:100%;height:130%;will-change:transform;}
+  .g1{grid-row:1 / 3;}
+  .g1 .parallax-img{background:linear-gradient(160deg,#1b1712,#3a2f1f 55%,#0f0d0b);}
+  .g2 .parallax-img{background:linear-gradient(150deg,#efe6cd,#c9ad74 60%,#8b6f3c);}
+  .g3 .parallax-img{background:linear-gradient(200deg,#2a2620,#100e0c 70%);}
+  .g4 .parallax-img{background:linear-gradient(120deg,#d9c293,#ad8a4e 50%,#5c4a29);}
+  .g5 .parallax-img{background:linear-gradient(170deg,#181512,#0b0a08 60%,#3a2f1f);}
+  .gallery-item .cap{
+    position:absolute;left:20px;bottom:18px;color:var(--ivory);
+    font-size:11px;letter-spacing:0.15em;text-transform:uppercase;
+    text-shadow:0 2px 12px rgba(0,0,0,0.5);
+  }
+
+  /* ---------- CTA / FOOTER ---------- */
+  .cta{
+    background:var(--ink);color:var(--ivory);text-align:center;
+    padding:160px 8vw;position:relative;
+  }
+  .cta .eyebrow{color:var(--gold-light);justify-content:center;} .cta .eyebrow::before{display:none;}
+  .cta h2{font-size:clamp(34px,5.5vw,72px);margin-top:24px;max-width:16ch;margin-inline:auto;color:var(--ivory);}
+  .cta h2 em{color:var(--gold-light);font-style:italic;}
+  .cta p{margin-top:22px;color:rgba(245,242,234,0.6);max-width:460px;margin-inline:auto;line-height:1.8;font-size:15px;}
+
+  .enquiry{margin-top:56px;display:flex;justify-content:center;gap:16px;flex-wrap:wrap;}
+  .enquiry input{
+    background:transparent;border:1px solid var(--line-light);color:var(--ivory);
+    padding:16px 20px;font-family:var(--sans);font-size:13px;letter-spacing:0.03em;
+    min-width:220px;
+  }
+  .enquiry input::placeholder{color:rgba(245,242,234,0.4);}
+  .enquiry button{
+    background:var(--gold);color:var(--ink);border:none;
+    padding:16px 34px;font-family:var(--sans);font-size:12px;letter-spacing:0.2em;text-transform:uppercase;
+    cursor:pointer;transition:background .3s ease, color .3s ease;
+  }
+  .enquiry button:hover{background:var(--gold-light);}
+
+  footer{
+    background:var(--ink);color:rgba(245,242,234,0.5);
+    border-top:1px solid var(--line-light);
+    padding:44px 8vw;display:flex;justify-content:space-between;flex-wrap:wrap;gap:20px;
+    font-size:11.5px;letter-spacing:0.05em;
+  }
+  footer .logo{font-size:15px;}
+  footer .fine{max-width:640px;line-height:1.8;color:rgba(245,242,234,0.35);font-size:10.5px;margin-top:10px;}
+  .foot-col{min-width:200px;}
+  .foot-col h5{font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:var(--gold-light);margin-bottom:14px;}
+  .foot-col div{margin-bottom:8px;}
+
+  .reveal{opacity:0;transform:translateY(28px);transition:opacity .9s ease, transform .9s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+
+  #rippleCanvas{
+    position:fixed;inset:0;width:100vw;height:100vh;
+    pointer-events:none;z-index:9999;
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{animation:none !important;transition:none !important;}
+  }
+</style>
+</head>
+<body>
+
+<header id="siteHeader">
+  <div class="logo">PAWAR REALTY<span>Est. Legacy in Land &amp; Trust</span></div>
+  <nav>
+    <ul>
+      <li><a href="#location">Location</a></li>
+      <li><a href="#elevation">Elevation</a></li>
+      <li><a href="#residences">Residences</a></li>
+      <li><a href="#amenities">Amenities</a></li>
+      <li><a href="#enquire">Enquire</a></li>
+    </ul>
+  </nav>
+  <button class="nav-toggle">&#9776;</button>
+</header>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg" id="heroBg">
+    <canvas id="heroCanvas"></canvas>
+  </div>
+  <div class="hero-lake" id="heroLake"></div>
+  <div class="hero-content">
+    <div class="eyebrow">Pawar Realty Presents</div>
+    <h1>Where the lake<br>meets its <em>quiet luxury.</em></h1>
+    <p class="hero-sub">Vanantara — 2, 3 &amp; 4 bedroom residences facing Upvan Lake, Thane. A private address for those who have already arrived, and now simply wish to belong somewhere still.</p>
+    <div class="hero-meta">
+      <div><b>68</b><span>Residences</span></div>
+      <div><b>24</b><span>Storeys</span></div>
+      <div><b>1</b><span>Address on the Lake</span></div>
+    </div>
+  </div>
+  <div class="scroll-cue"><span>Scroll</span><div class="line"></div></div>
+</section>
+
+<!-- INTRO / MAGNETIC TEXT -->
+<section class="intro section-pad">
+  <div class="intro-inner">
+    <div class="eyebrow" style="justify-content:center;">A Philosophy of Space</div>
+    <p class="magnetic-text" id="magneticText"></p>
+  </div>
+</section>
+
+<!-- LOCATION -->
+<section class="location" id="location">
+  <div class="location-copy reveal">
+    <div class="eyebrow">The Setting</div>
+    <h2>Upvan, held<br>by water.</h2>
+    <p>Thane's most guarded green address, Upvan Lake has spent decades resisting the city around it. Vanantara stands at its edge — not to overlook the lake, but to live in conversation with it, morning mist and evening light included.</p>
+    <div class="location-list">
+      <div><span>Upvan Lake</span><span>Adjoining</span></div>
+      <div><span>Yeoor Hills</span><span>6 min</span></div>
+      <div><span>Eastern Express Highway</span><span>9 min</span></div>
+      <div><span>Thane Railway Station</span><span>14 min</span></div>
+      <div><span>Mumbai (BKC)</span><span>52 min</span></div>
+    </div>
+  </div>
+  <div class="location-visual">
+    <canvas id="mapCanvas"></canvas>
+  </div>
+</section>
+
+<!-- ELEVATION SIGNATURE SECTION -->
+<section class="elevation" id="elevation">
+  <div class="elevation-head reveal">
+    <div class="eyebrow" style="justify-content:center;">The Elevation, Assembling</div>
+    <h2>Vanantara, rising.</h2>
+    <p>Twenty-four storeys, drawn one grain at a time. Continue scrolling — the tower forms exactly as it will stand: from the ground, upward.</p>
+  </div>
+  <div class="elevation-stage">
+    <div class="elevation-pin">
+      <canvas id="elevationCanvas"></canvas>
+      <div class="elevation-progress">
+        <span>Ground</span>
+        <div class="bar"><i id="elevBarFill"></i></div>
+        <span>Crown</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESIDENCES -->
+<section class="residences section-pad" id="residences">
+  <div class="residences-head reveal">
+    <h2>Residence Plans</h2>
+    <p>Each layout is oriented for uninterrupted lake or hill views, cross-ventilated, and released in limited number per floor.</p>
+  </div>
+  <div class="res-grid">
+    <div class="res-card reveal">
+      <div class="res-num">01 — The Aranya</div>
+      <h3>2 Bedroom</h3>
+      <div class="res-area">1,240 – 1,360 Sq.Ft. Carpet</div>
+      <p>An entry residence in name only — deep balconies, a private study nook, and a kitchen built for those who cook as a craft, not a chore.</p>
+      <div class="res-line">Lake-Facing Available</div>
+    </div>
+    <div class="res-card reveal">
+      <div class="res-num">02 — The Nilaya</div>
+      <h3>3 Bedroom</h3>
+      <div class="res-area">1,780 – 1,950 Sq.Ft. Carpet</div>
+      <p>A wraparound deck, a formal and informal living divide, and a master suite positioned to greet the lake before anyone else does.</p>
+      <div class="res-line">Corner Units Remaining</div>
+    </div>
+    <div class="res-card reveal">
+      <div class="res-num">03 — The Vayu</div>
+      <h3>4 Bedroom Sky Villa</h3>
+      <div class="res-area">2,860 Sq.Ft. Carpet + Terrace</div>
+      <p>One per floor, top eight levels only. A private lift lobby, a plunge pool terrace, and a view that belongs to no one else.</p>
+      <div class="res-line">By Invitation</div>
+    </div>
+  </div>
+</section>
+
+<!-- AMENITIES -->
+<section class="amenities section-pad" id="amenities">
+  <div class="eyebrow">Held Within</div>
+  <h2>Amenities considered,<br>not accumulated.</h2>
+  <div class="amenity-grid">
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><path d="M3 17h18M4 17V9l8-5 8 5v8M9 17v-5h6v5"/></svg><h4>Lakeview Clubhouse</h4><p>A single-storey pavilion, glass on three sides.</p></div>
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><path d="M2 12c2-3 4-3 6 0s4 3 6 0 4-3 6 0M2 18c2-3 4-3 6 0s4 3 6 0 4-3 6 0"/></svg><h4>Infinity Edge Pool</h4><p>Overlooking Upvan, lit only after dusk.</p></div>
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><path d="M12 2v20M2 12h20"/></svg><h4>Private Wellness Deck</h4><p>Yoga lawn, spa suite, and cold plunge.</p></div>
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="1"/></svg><h4>Curated Concierge</h4><p>One point of contact, for everything.</p></div>
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg><h4>24-Hr Estate Security</h4><p>Triple-tier access, biometric entry.</p></div>
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><path d="M4 20V10l8-6 8 6v10M9 20v-6h6v6"/></svg><h4>Private Screening Room</h4><p>Twelve seats, acoustically sealed.</p></div>
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><path d="M3 3h18v14H3zM8 21h8"/></svg><h4>Business Lounge</h4><p>For the calls that follow you home.</p></div>
+    <div class="amenity reveal"><svg viewBox="0 0 24 24"><path d="M4 12h16M4 6h16M4 18h16"/></svg><h4>Automated Valet</h4><p>Your car, retrieved before you ask.</p></div>
+  </div>
+</section>
+
+<!-- GALLERY -->
+<section class="gallery section-pad">
+  <div class="eyebrow">A Glimpse Within</div>
+  <h2 style="margin-top:20px;">The life it affords.</h2>
+  <div class="gallery-grid">
+    <div class="gallery-item g1"><div class="parallax-img" data-speed="0.15"></div><span class="cap">The Lakeside Terrace</span></div>
+    <div class="gallery-item g2"><div class="parallax-img" data-speed="0.25"></div><span class="cap">Interiors, By Design</span></div>
+    <div class="gallery-item g3"><div class="parallax-img" data-speed="0.1"></div><span class="cap">Evenings at the Clubhouse</span></div>
+    <div class="gallery-item g4"><div class="parallax-img" data-speed="0.2"></div><span class="cap">Sky Villa, at Dusk</span></div>
+    <div class="gallery-item g5"><div class="parallax-img" data-speed="0.12"></div><span class="cap">Upvan, from Above</span></div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta" id="enquire">
+  <div class="eyebrow">Limited Residences Remain</div>
+  <h2>Some addresses are bought.<br><em>This one is earned.</em></h2>
+  <p>Book a private preview of Vanantara — by appointment, at the site, or over a call with our NRI desk.</p>
+  <form class="enquiry" onsubmit="event.preventDefault(); this.querySelector('button').textContent='Request Received';">
+    <input type="text" placeholder="Full Name" required>
+    <input type="tel" placeholder="Phone / WhatsApp" required>
+    <button type="submit">Request a Private Preview</button>
+  </form>
+</section>
+
+<footer>
+  <div class="foot-col">
+    <div class="logo" style="color:var(--ivory);">PAWAR REALTY</div>
+    <div class="fine">Vanantara, Pawar Realty. Near Upvan Lake, Thane (W), Maharashtra. RERA registration and project details available on request. All visuals are artistic impressions; actual specifications may vary.</div>
+  </div>
+  <div class="foot-col">
+    <h5>Sales Gallery</h5>
+    <div>Opp. Upvan Lake, Thane West</div>
+    <div>Daily, 10 AM – 7 PM</div>
+  </div>
+  <div class="foot-col">
+    <h5>Reach Us</h5>
+    <div>enquiry@pawarrealty.in</div>
+    <div>+91 22 4000 0000</div>
+    <div>NRI Desk: +91 98000 00000</div>
+  </div>
+</footer>
+
+<canvas id="rippleCanvas"></canvas>
+
+<script>
+/* ---------------- Header on scroll ---------------- */
+const header = document.getElementById('siteHeader');
+window.addEventListener('scroll', () => {
+  header.classList.toggle('scrolled', window.scrollY > 60);
+}, {passive:true});
+
+/* ---------------- Reveal on scroll ---------------- */
+const revealEls = document.querySelectorAll('.reveal');
+const io = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if(e.isIntersecting){ e.target.classList.add('in'); io.unobserve(e.target); } });
+}, {threshold:0.15});
+revealEls.forEach(el => io.observe(el));
+
+/* ---------------- Hero: liquid water-ripple distortion ---------------- */
+/* Classic two-buffer height-field ripple simulation. The full night scene
+   (towers, sky glow, lake bands) is rendered into a small offscreen buffer;
+   every frame the buffer is displaced according to the simulated water
+   surface, then the distorted result is upscaled into the visible canvas. */
+const heroCanvas = document.getElementById('heroCanvas');
+const hctx = heroCanvas.getContext('2d');
+const heroEl = document.querySelector('.hero');
+
+let bufW = 220, bufH = 130;
+let rippleA = new Float32Array(bufW*bufH);
+let rippleB = new Float32Array(bufW*bufH);
+const sceneCanvas = document.createElement('canvas');
+const sceneCtx = sceneCanvas.getContext('2d');
+const workCanvas = document.createElement('canvas');
+const workCtx = workCanvas.getContext('2d');
+
+function sizeBuffers(){
+  const ratio = heroEl.clientHeight / heroEl.clientWidth;
+  bufW = 220;
+  bufH = Math.max(60, Math.round(bufW * ratio));
+  rippleA = new Float32Array(bufW*bufH);
+  rippleB = new Float32Array(bufW*bufH);
+  sceneCanvas.width = bufW; sceneCanvas.height = bufH;
+  workCanvas.width = bufW; workCanvas.height = bufH;
+}
+function resizeHeroCanvas(){
+  heroCanvas.width = heroEl.clientWidth * devicePixelRatio;
+  heroCanvas.height = heroEl.clientHeight * devicePixelRatio;
+  sizeBuffers();
+}
+
+function drawFacetTowerLow(cx, baseY, w, h, spireH, glow){
+  const segs = 6;
+  let y = baseY, cw = w;
+  sceneCtx.fillStyle = 'rgb(8,12,18)';
+  for(let i=0;i<segs;i++){
+    const segH = h/segs, wTop = cw*0.87;
+    sceneCtx.beginPath();
+    sceneCtx.moveTo(cx-cw/2,y); sceneCtx.lineTo(cx+cw/2,y);
+    sceneCtx.lineTo(cx+wTop/2,y-segH); sceneCtx.lineTo(cx-wTop/2,y-segH);
+    sceneCtx.closePath(); sceneCtx.fill();
+    sceneCtx.strokeStyle = `rgba(120,190,255,${0.4+glow*0.3})`;
+    sceneCtx.lineWidth = 0.7;
+    sceneCtx.stroke();
+    y -= segH; cw = wTop;
+  }
+  sceneCtx.fillStyle = 'rgb(8,12,18)';
+  sceneCtx.fillRect(cx-cw*0.30,y-6,cw*0.6,6);
+  sceneCtx.fillRect(cx-cw*0.16,y-11,cw*0.32,5);
+  sceneCtx.fillRect(cx-0.6, y-11-spireH, 1.2, spireH);
+  sceneCtx.beginPath();
+  sceneCtx.arc(cx, y-13, 1.6, 0, Math.PI*2);
+  sceneCtx.fillStyle = `rgba(150,210,255,${0.7+glow*0.3})`;
+  sceneCtx.shadowColor = 'rgba(120,190,255,0.9)';
+  sceneCtx.shadowBlur = 5;
+  sceneCtx.fill();
+  sceneCtx.shadowBlur = 0;
+}
+
+function renderScene(ts){
+  const w = bufW, h = bufH;
+  const grad = sceneCtx.createLinearGradient(0,0,0,h);
+  grad.addColorStop(0,'#0A0E14'); grad.addColorStop(0.5,'#0B0D10'); grad.addColorStop(1,'#050403');
+  sceneCtx.fillStyle = grad;
+  sceneCtx.fillRect(0,0,w,h);
+  const skyGlow = sceneCtx.createRadialGradient(w*0.5,h*0.3,4,w*0.5,h*0.3,w*0.6);
+  skyGlow.addColorStop(0,'rgba(70,140,200,0.16)'); skyGlow.addColorStop(1,'rgba(70,140,200,0)');
+  sceneCtx.fillStyle = skyGlow; sceneCtx.fillRect(0,0,w,h);
+
+  const pulse = 0.5 + 0.5*Math.sin(ts*0.0012);
+  const baseY = h*0.86;
+  drawFacetTowerLow(w*0.36, baseY, w*0.15, h*0.5, h*0.09, pulse);
+  drawFacetTowerLow(w*0.62, baseY, w*0.17, h*0.6, h*0.11, pulse*0.8+0.1);
+  const bridgeY = baseY - h*0.28;
+  sceneCtx.fillStyle = 'rgb(8,12,18)';
+  sceneCtx.fillRect(w*0.41, bridgeY, w*0.21-0, h*0.01);
+  sceneCtx.strokeStyle = `rgba(120,190,255,${0.3+pulse*0.2})`;
+  sceneCtx.lineWidth = 0.6;
+  sceneCtx.strokeRect(w*0.41, bridgeY, w*0.21, h*0.01);
+
+  // lake band with animated bands, lower part of frame
+  const lakeTop = h*0.72;
+  sceneCtx.fillStyle = 'rgba(5,4,3,0.4)';
+  sceneCtx.fillRect(0, lakeTop, w, h-lakeTop);
+  for(let i=0;i<10;i++){
+    const depth = i/10;
+    const y = lakeTop + depth*(h-lakeTop);
+    sceneCtx.beginPath();
+    for(let x=0;x<=w;x+=4){
+      const yy = y + Math.sin(x*0.15 + ts*0.0011 + i)*(0.6+depth*1.4);
+      if(x===0) sceneCtx.moveTo(x,yy); else sceneCtx.lineTo(x,yy);
+    }
+    sceneCtx.strokeStyle = `rgba(217,194,147,${0.06+(1-depth)*0.12})`;
+    sceneCtx.lineWidth = 0.6;
+    sceneCtx.stroke();
+  }
+}
+
+/* ---- ripple physics: classic height-field wave equation ---- */
+function splash(bx, by, strength, radius){
+  for(let oy=-radius; oy<=radius; oy++){
+    for(let ox=-radius; ox<=radius; ox++){
+      const x = Math.round(bx+ox), y = Math.round(by+oy);
+      if(x<1||x>=bufW-1||y<1||y>=bufH-1) continue;
+      const d = Math.hypot(ox,oy);
+      if(d>radius) continue;
+      rippleA[y*bufW+x] += strength * (1 - d/radius);
+    }
+  }
+}
+function updateRipple(){
+  for(let y=1;y<bufH-1;y++){
+    const row = y*bufW;
+    for(let x=1;x<bufW-1;x++){
+      const i = row+x;
+      rippleB[i] = ((rippleA[i-1]+rippleA[i+1]+rippleA[i-bufW]+rippleA[i+bufW])/2) - rippleB[i];
+      rippleB[i] *= 0.975;
+    }
+  }
+  const tmp = rippleA; rippleA = rippleB; rippleB = tmp;
+}
+function renderDistorted(){
+  const sceneData = sceneCtx.getImageData(0,0,bufW,bufH);
+  const outData = workCtx.createImageData(bufW,bufH);
+  const src = sceneData.data, out = outData.data;
+  const REFRACT = 3.2, LIGHT = 3.5;
+  for(let y=1;y<bufH-1;y++){
+    for(let x=1;x<bufW-1;x++){
+      const i = y*bufW+x;
+      const dx = (rippleA[i+1] - rippleA[i-1]) * REFRACT;
+      const dy = (rippleA[i+bufW] - rippleA[i-bufW]) * REFRACT;
+      let sx = x + dx, sy = y + dy;
+      sx = Math.min(bufW-1, Math.max(0, sx));
+      sy = Math.min(bufH-1, Math.max(0, sy));
+      const srcIdx = (Math.round(sy)*bufW+Math.round(sx))*4;
+      const outIdx = i*4;
+      const light = 1 + Math.max(-0.5, Math.min(0.7, dx*LIGHT*0.06 + dy*LIGHT*0.02));
+      out[outIdx]   = Math.min(255, src[srcIdx]*light + Math.max(0,dy)*10);
+      out[outIdx+1] = Math.min(255, src[srcIdx+1]*light + Math.max(0,dy)*12);
+      out[outIdx+2] = Math.min(255, src[srcIdx+2]*light + Math.max(0,dy)*18);
+      out[outIdx+3] = 255;
+    }
+  }
+  // edges copied plain to avoid border artifacts
+  for(let x=0;x<bufW;x++){
+    [0, bufH-1].forEach(y=>{
+      const i=(y*bufW+x)*4, s=(y*bufW+x)*4;
+      out[i]=src[s]; out[i+1]=src[s+1]; out[i+2]=src[s+2]; out[i+3]=255;
+    });
+  }
+  workCtx.putImageData(outData,0,0);
+  hctx.imageSmoothingEnabled = true;
+  hctx.clearRect(0,0,heroCanvas.width,heroCanvas.height);
+  hctx.drawImage(workCanvas, 0,0,bufW,bufH, 0,0,heroCanvas.width,heroCanvas.height);
+}
+
+let lastMoveSplash = 0;
+heroEl.addEventListener('mousemove', (e) => {
+  const now = performance.now();
+  if(now - lastMoveSplash < 45) return;
+  lastMoveSplash = now;
+  const r = heroEl.getBoundingClientRect();
+  const bx = ((e.clientX - r.left)/r.width) * bufW;
+  const by = ((e.clientY - r.top)/r.height) * bufH;
+  splash(bx, by, 2.5, 2);
+});
+heroEl.addEventListener('click', (e) => {
+  const r = heroEl.getBoundingClientRect();
+  const bx = ((e.clientX - r.left)/r.width) * bufW;
+  const by = ((e.clientY - r.top)/r.height) * bufH;
+  splash(bx, by, 22, 5);
+});
+
+function heroLoop(ts){
+  renderScene(ts||0);
+  updateRipple();
+  updateRipple();
+  renderDistorted();
+  requestAnimationFrame(heroLoop);
+}
+resizeHeroCanvas();
+window.addEventListener('resize', resizeHeroCanvas);
+requestAnimationFrame(heroLoop);
+
+/* ---------------- Global click water ripples (rest of page) ---------------- */
+const rippleCanvas = document.getElementById('rippleCanvas');
+const rctx = rippleCanvas.getContext('2d');
+function resizeRipple(){
+  rippleCanvas.width = window.innerWidth * devicePixelRatio;
+  rippleCanvas.height = window.innerHeight * devicePixelRatio;
+}
+resizeRipple();
+window.addEventListener('resize', resizeRipple);
+
+let ripples = [];
+document.addEventListener('click', (e) => {
+  if(e.target.closest('.hero')) return; // hero has its own liquid distortion
+  ripples.push({ x: e.clientX*devicePixelRatio, y: e.clientY*devicePixelRatio, start: performance.now() });
+  if(ripples.length > 12) ripples.shift();
+});
+
+function drawRipples(now){
+  rctx.clearRect(0,0,rippleCanvas.width,rippleCanvas.height);
+  ripples = ripples.filter(r => (now - r.start) < 1500);
+  ripples.forEach(r => {
+    const age = now - r.start;
+    [0, 160, 320].forEach(delay => {
+      const t = age - delay;
+      if(t < 0 || t > 1300) return;
+      const progress = t / 1300;
+      const radius = progress * 90 * devicePixelRatio;
+      const alpha = (1 - progress) * 0.55;
+      rctx.beginPath();
+      rctx.arc(r.x, r.y, radius, 0, Math.PI*2);
+      rctx.strokeStyle = `rgba(173,138,78,${alpha})`;
+      rctx.lineWidth = (2 - progress*1.6) * devicePixelRatio;
+      rctx.stroke();
+    });
+    if(age < 260){
+      const fAlpha = (1 - age/260) * 0.3;
+      const grad = rctx.createRadialGradient(r.x,r.y,0,r.x,r.y,26*devicePixelRatio);
+      grad.addColorStop(0, `rgba(245,242,234,${fAlpha})`);
+      grad.addColorStop(1, 'rgba(245,242,234,0)');
+      rctx.fillStyle = grad;
+      rctx.beginPath();
+      rctx.arc(r.x,r.y,26*devicePixelRatio,0,Math.PI*2);
+      rctx.fill();
+    }
+  });
+  requestAnimationFrame(drawRipples);
+}
+requestAnimationFrame(drawRipples);
+
+
+/* ---------------- Hero parallax ---------------- */
+const heroBg = document.getElementById('heroBg');
+const heroLake = document.getElementById('heroLake');
+function heroParallax(){
+  const y = window.scrollY;
+  if(y < window.innerHeight * 1.2){
+    heroBg.style.transform = `translateY(${y * 0.28}px)`;
+    heroLake.style.transform = `translateY(${y * 0.14}px)`;
+  }
+}
+window.addEventListener('scroll', heroParallax, {passive:true});
+
+/* ---------------- Gallery parallax ---------------- */
+const parallaxImgs = document.querySelectorAll('.parallax-img');
+function galleryParallax(){
+  parallaxImgs.forEach(img => {
+    const rect = img.parentElement.getBoundingClientRect();
+    const speed = parseFloat(img.dataset.speed) || 0.15;
+    const offset = (rect.top - window.innerHeight/2) * speed;
+    img.style.transform = `translateY(${offset}px)`;
+  });
+}
+window.addEventListener('scroll', galleryParallax, {passive:true});
+galleryParallax();
+
+/* ---------------- Magnetic cursor text ---------------- */
+const magneticText = document.getElementById('magneticText');
+const introSentence = "Space, here, is not measured in square feet — it is measured in the silence between two people, the width of a balcony held over water, and the time it takes light to cross a room you actually live in.";
+magneticText.innerHTML = introSentence.split(' ').map(w => `<span>${w}</span>`).join(' ');
+const words = magneticText.querySelectorAll('span');
+let mouseX = -9999, mouseY = -9999;
+document.addEventListener('mousemove', (e) => { mouseX = e.clientX; mouseY = e.clientY; });
+function magneticLoop(){
+  words.forEach(w => {
+    const r = w.getBoundingClientRect();
+    const cx = r.left + r.width/2, cy = r.top + r.height/2;
+    const dist = Math.hypot(mouseX - cx, mouseY - cy);
+    const radius = 160;
+    if(dist < radius){
+      const strength = (1 - dist/radius);
+      const dx = (cx - mouseX) * 0.18 * strength;
+      const dy = (cy - mouseY) * 0.18 * strength;
+      w.style.transform = `translate(${dx}px, ${dy}px) scale(${1 + strength*0.18})`;
+      w.style.color = 'var(--gold-dim)';
+      w.style.opacity = 1;
+    } else {
+      w.style.transform = 'translate(0,0) scale(1)';
+      w.style.color = '';
+      w.style.opacity = 0.92;
+    }
+  });
+  requestAnimationFrame(magneticLoop);
+}
+requestAnimationFrame(magneticLoop);
+
+/* ---------------- Location map canvas (subtle line-art parallax) ---------------- */
+const mapCanvas = document.getElementById('mapCanvas');
+const mctx = mapCanvas.getContext('2d');
+function resizeMap(){
+  const parent = mapCanvas.parentElement;
+  mapCanvas.width = parent.clientWidth * devicePixelRatio;
+  mapCanvas.height = parent.clientHeight * devicePixelRatio;
+  mapCanvas.style.width = parent.clientWidth + 'px';
+  mapCanvas.style.height = parent.clientHeight + 'px';
+}
+function drawMap(t){
+  const w = mapCanvas.width, h = mapCanvas.height;
+  mctx.clearRect(0,0,w,h);
+  mctx.fillStyle = '#100E0C';
+  mctx.fillRect(0,0,w,h);
+  // lake blob
+  mctx.save();
+  mctx.translate(w*0.55, h*0.55);
+  mctx.beginPath();
+  const pts = 40;
+  for(let i=0;i<=pts;i++){
+    const a = (i/pts) * Math.PI*2;
+    const wob = Math.sin(a*3 + t*0.0004) * (w*0.02);
+    const rx = w*0.32 + wob, ry = h*0.24 + wob*0.6;
+    const x = Math.cos(a)*rx, y = Math.sin(a)*ry;
+    if(i===0) mctx.moveTo(x,y); else mctx.lineTo(x,y);
+  }
+  mctx.closePath();
+  const grad = mctx.createRadialGradient(0,0,10,0,0,w*0.35);
+  grad.addColorStop(0,'rgba(173,138,78,0.35)');
+  grad.addColorStop(1,'rgba(173,138,78,0.04)');
+  mctx.fillStyle = grad;
+  mctx.fill();
+  mctx.strokeStyle = 'rgba(217,194,147,0.6)';
+  mctx.lineWidth = 1;
+  mctx.stroke();
+  mctx.restore();
+  // radiating roads
+  mctx.strokeStyle = 'rgba(217,194,147,0.15)';
+  for(let i=0;i<10;i++){
+    mctx.beginPath();
+    mctx.moveTo(w*0.55, h*0.55);
+    const a = (i/10)*Math.PI*2;
+    mctx.lineTo(w*0.55 + Math.cos(a)*w*0.7, h*0.55 + Math.sin(a)*w*0.7);
+    mctx.stroke();
+  }
+  // marker
+  mctx.beginPath();
+  mctx.arc(w*0.55, h*0.55, 5*devicePixelRatio, 0, Math.PI*2);
+  mctx.fillStyle = '#D9C293';
+  mctx.fill();
+  requestAnimationFrame(drawMap);
+}
+resizeMap();
+window.addEventListener('resize', resizeMap);
+requestAnimationFrame(drawMap);
+
+/* ---------------- ELEVATION: pixel-forming building on scroll ---------------- */
+const elevCanvas = document.getElementById('elevationCanvas');
+const ectx = elevCanvas.getContext('2d');
+const elevStage = document.querySelector('.elevation-stage');
+const elevBarFill = document.getElementById('elevBarFill');
+
+const BW = 480, BH = 720; // logical build resolution
+let buildingPoints = [];
+
+function drawFacetedTower(octx, cx, baseY, width, height, spireH){
+  // tapering faceted tower: a few stacked trapezoid segments narrowing upward, plus a stepped crown and spire
+  const segs = 5;
+  let y = baseY;
+  let w = width;
+  for(let i=0;i<segs;i++){
+    const segH = height/segs;
+    const wTop = w * 0.86;
+    octx.beginPath();
+    octx.moveTo(cx - w/2, y);
+    octx.lineTo(cx + w/2, y);
+    octx.lineTo(cx + wTop/2, y - segH);
+    octx.lineTo(cx - wTop/2, y - segH);
+    octx.closePath();
+    octx.fill();
+    y -= segH; w = wTop;
+  }
+  // crown steps
+  octx.fillRect(cx - w*0.30, y-18, w*0.60, 18);
+  octx.fillRect(cx - w*0.18, y-34, w*0.36, 16);
+  // spire + ball
+  octx.beginPath();
+  octx.arc(cx, y-34-6, 5, 0, Math.PI*2);
+  octx.fill();
+  octx.fillRect(cx-1.5, y-34-10-spireH, 3, spireH);
+  return y-34-10-spireH; // tip y
+}
+
+function buildSilhouetteMask(){
+  const off = document.createElement('canvas');
+  off.width = BW; off.height = BH;
+  const octx = off.getContext('2d');
+  octx.fillStyle = '#fff';
+  const baseY = BH - 40;
+
+  // shared podium linking both towers
+  octx.fillRect(BW*0.14, baseY-46, BW*0.72, 46);
+
+  // twin towers
+  const leftCx = BW*0.33, rightCx = BW*0.67;
+  const leftTop = drawFacetedTower(octx, leftCx, baseY-46, BW*0.24, 300, 70);
+  const rightTop = drawFacetedTower(octx, rightCx, baseY-46, BW*0.24, 350, 90);
+
+  // sky-bridge connecting the towers, roughly mid-height
+  const bridgeY = baseY-46-160;
+  octx.fillRect(leftCx+BW*0.05, bridgeY-10, (rightCx-BW*0.05)-(leftCx+BW*0.05), 14);
+  // support struts
+  octx.beginPath();
+  octx.moveTo(leftCx+BW*0.02, baseY-46-40); octx.lineTo(leftCx+BW*0.08, bridgeY+4); octx.lineTo(leftCx+BW*0.10, bridgeY+4); octx.lineTo(leftCx+BW*0.04, baseY-46-40);
+  octx.closePath(); octx.fill();
+  octx.beginPath();
+  octx.moveTo(rightCx-BW*0.02, baseY-46-40); octx.lineTo(rightCx-BW*0.08, bridgeY+4); octx.lineTo(rightCx-BW*0.10, bridgeY+4); octx.lineTo(rightCx-BW*0.04, baseY-46-40);
+  octx.closePath(); octx.fill();
+
+  const data = octx.getImageData(0,0,BW,BH).data;
+  const pts = [];
+  const step = 5;
+  for(let y=0;y<BH;y+=step){
+    for(let x=0;x<BW;x+=step){
+      const idx = (y*BW+x)*4;
+      if(data[idx+3] > 100){
+        pts.push({x, y, r: Math.random()});
+      }
+    }
+  }
+  // shuffle-ish by random threshold already assigned; sort by (baseY - y) so lower floors bias earlier
+  pts.forEach(p => { p.order = (BH - p.y) * 0.6 + Math.random()*BH*0.4; });
+  pts.sort((a,b)=>a.order-b.order);
+  const maxOrder = pts.length ? pts[pts.length-1].order : 1;
+  pts.forEach((p,i)=> p.threshold = i/pts.length);
+  return pts;
+}
+
+function resizeElevation(){
+  const size = Math.min(window.innerHeight*0.8, 640);
+  elevCanvas.width = BW * devicePixelRatio;
+  elevCanvas.height = BH * devicePixelRatio;
+  elevCanvas.style.height = size + 'px';
+  elevCanvas.style.width = (size*(BW/BH)) + 'px';
+}
+resizeElevation();
+window.addEventListener('resize', resizeElevation);
+buildingPoints = buildSilhouetteMask();
+
+function drawElevation(progress){
+  const w = elevCanvas.width, h = elevCanvas.height;
+  ectx.clearRect(0,0,w,h);
+  const scaleX = w/BW, scaleY = h/BH;
+
+  // faint blueprint grid
+  ectx.strokeStyle = 'rgba(15,13,11,0.06)';
+  ectx.lineWidth = 1;
+  for(let gx=0; gx<BW; gx+=20){ ectx.beginPath(); ectx.moveTo(gx*scaleX,0); ectx.lineTo(gx*scaleX,h); ectx.stroke(); }
+  for(let gy=0; gy<BH; gy+=20){ ectx.beginPath(); ectx.moveTo(0,gy*scaleY); ectx.lineTo(w,gy*scaleY); ectx.stroke(); }
+
+  // ground line
+  ectx.strokeStyle = 'rgba(173,138,78,0.5)';
+  ectx.beginPath();
+  ectx.moveTo(0,(BH-40)*scaleY);
+  ectx.lineTo(w,(BH-40)*scaleY);
+  ectx.stroke();
+
+  const count = Math.floor(progress * buildingPoints.length);
+  for(let i=0;i<count;i++){
+    const p = buildingPoints[i];
+    const heightRatio = 1 - (p.y/BH);
+    // color: black base -> gold mid -> ivory-gold top
+    let color;
+    if(heightRatio < 0.35) color = `rgba(15,13,11,${0.85+p.r*0.15})`;
+    else if(heightRatio < 0.7) color = `rgba(173,138,78,${0.75+p.r*0.25})`;
+    else color = `rgba(217,194,147,${0.8+p.r*0.2})`;
+    ectx.fillStyle = color;
+    const size = 4*devicePixelRatio*scaleX/1;
+    ectx.fillRect(p.x*scaleX, p.y*scaleY, size, size);
+  }
+  elevBarFill.style.width = (progress*100).toFixed(1)+'%';
+}
+drawElevation(0);
+
+function elevationScroll(){
+  const rect = elevStage.getBoundingClientRect();
+  const total = elevStage.offsetHeight - window.innerHeight;
+  let progress = (-rect.top) / total;
+  progress = Math.max(0, Math.min(1, progress));
+  drawElevation(progress);
+}
+window.addEventListener('scroll', elevationScroll, {passive:true});
+elevationScroll();
+</script>
+</body>
+</html>

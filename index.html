@@ -292,7 +292,7 @@
   /* ---------- AMENITIES / PARALLAX GALLERY ---------- */
   .amenities{background:var(--ink);color:var(--ivory);position:relative;}
   .amenities .eyebrow{color:var(--gold-light);} .amenities .eyebrow::before{background:var(--gold-light);}
-  .amenities h2{color:var(--ivory);font-size:clamp(32px,4vw,52px);margin-top:20px;max-width:14ch;}
+  .amenities h2{color:var(--ivory);font-size:clamp(32px,4vw,52px);margin-top:20px;max-width:22ch;}
   .amenity-grid{margin-top:70px;display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--line-light);}
   @media (max-width:900px){ .amenity-grid{grid-template-columns:repeat(2,1fr);} }
   .amenity{background:var(--ink);padding:44px 26px;text-align:center;}
@@ -413,6 +413,38 @@
   }
 
 
+
+
+  /* Mac-style gallery preview */
+  .gallery-item{cursor:zoom-in;}
+  .gallery-item:focus-visible{outline:2px solid rgba(173,138,78,.9);outline-offset:4px;}
+  .mac-preview{
+    position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;
+    padding:clamp(18px,4vw,54px);opacity:0;pointer-events:none;
+    background:rgba(10,10,10,0);backdrop-filter:blur(0px);
+    transition:opacity .36s cubic-bezier(.2,.8,.2,1), background .36s cubic-bezier(.2,.8,.2,1), backdrop-filter .36s cubic-bezier(.2,.8,.2,1);
+  }
+  .mac-preview.is-open{opacity:1;pointer-events:auto;background:rgba(10,10,10,.58);backdrop-filter:blur(18px);}
+  .mac-preview.is-closing{opacity:0;background:rgba(10,10,10,0);backdrop-filter:blur(0px);}
+  .mac-preview-card{
+    position:relative;width:min(1120px,92vw);height:min(74vh,720px);border-radius:28px;overflow:hidden;
+    background:#111;box-shadow:0 40px 120px rgba(0,0,0,.55),0 8px 28px rgba(0,0,0,.35),inset 0 0 0 1px rgba(255,255,255,.18);
+    transform:scale(.78) translateY(34px);opacity:0;filter:saturate(.92);
+    transition:transform .52s cubic-bezier(.16,1,.3,1), opacity .28s ease, filter .52s cubic-bezier(.16,1,.3,1);
+  }
+  .mac-preview.is-open .mac-preview-card{transform:scale(1) translateY(0);opacity:1;filter:saturate(1);}
+  .mac-preview.is-closing .mac-preview-card{transform:scale(.84) translateY(28px);opacity:0;filter:saturate(.9);}
+  .mac-preview-image{position:absolute;inset:0;background-size:cover;background-position:center;background-repeat:no-repeat;transform:scale(1.03);transition:transform .75s cubic-bezier(.16,1,.3,1);}
+  .mac-preview.is-open .mac-preview-image{transform:scale(1);}
+  .mac-preview-card::after{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(0,0,0,0) 62%,rgba(0,0,0,.42) 100%);pointer-events:none;}
+  .mac-preview-title{position:absolute;left:26px;right:82px;bottom:22px;z-index:2;color:#fff;font-size:clamp(18px,2vw,28px);letter-spacing:.02em;text-shadow:0 2px 18px rgba(0,0,0,.55);}
+  .mac-preview-close{position:absolute;top:18px;right:18px;z-index:3;width:38px;height:38px;border:0;border-radius:50%;display:grid;place-items:center;cursor:pointer;color:#fff;background:rgba(35,35,35,.58);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16);backdrop-filter:blur(14px);font-size:24px;line-height:1;transition:transform .22s ease,background .22s ease;}
+  .mac-preview-close:hover{transform:scale(1.06);background:rgba(55,55,55,.72);}
+  @media (max-width:700px){.mac-preview-card{width:94vw;height:62vh;border-radius:22px}.mac-preview-title{left:18px;bottom:18px;right:70px}.mac-preview-close{top:14px;right:14px}}
+
+
+  /* amenities heading fix */
+  .amenities h2{max-width:22ch !important;}
 </style>
 </head>
 <body>
@@ -1012,7 +1044,7 @@ galleryParallax();
 
 /* ---------------- Magnetic cursor text ---------------- */
 const magneticText = document.getElementById('magneticText');
-const introSentence = "Space, here, is not measured in square feet — it is measured in the silence between two people, the width of a balcony held over water, and the time it takes light to cross a room you actually live in.";
+const introSentence = "Space, here, is not measured in square feet it is measured in the silence between two people, the width of a balcony held over water, and the time it takes light to cross a room you actually live in.";
 magneticText.innerHTML = introSentence.split(' ').map(w => `<span>${w}</span>`).join(' ');
 const words = magneticText.querySelectorAll('span');
 let mouseX = -9999, mouseY = -9999;
@@ -1258,5 +1290,76 @@ document.addEventListener('DOMContentLoaded',function(){
   });
 })();
 </script>
+
+
+<script>
+/* Mac-style preview for “The life it affords.” gallery */
+(function(){
+  const galleryItems = Array.from(document.querySelectorAll('.gallery .gallery-item'));
+  if(!galleryItems.length) return;
+
+  const preview = document.createElement('div');
+  preview.className = 'mac-preview';
+  preview.setAttribute('aria-hidden','true');
+  preview.innerHTML = '<div class="mac-preview-card" role="dialog" aria-modal="true" aria-label="Gallery preview"><button class="mac-preview-close" type="button" aria-label="Close preview">×</button><div class="mac-preview-image"></div><div class="mac-preview-title"></div></div>';
+  document.body.appendChild(preview);
+
+  const card = preview.querySelector('.mac-preview-card');
+  const image = preview.querySelector('.mac-preview-image');
+  const title = preview.querySelector('.mac-preview-title');
+  const closeBtn = preview.querySelector('.mac-preview-close');
+  let closingTimer;
+
+  function getGalleryBackground(item){
+    const img = item.querySelector('.parallax-img');
+    return img ? getComputedStyle(img).backgroundImage : '';
+  }
+
+  function openPreview(item){
+    clearTimeout(closingTimer);
+    image.style.backgroundImage = getGalleryBackground(item);
+    title.textContent = (item.querySelector('.cap')?.textContent || '').trim();
+    preview.classList.remove('is-closing');
+    preview.setAttribute('aria-hidden','false');
+    document.body.style.overflow = 'hidden';
+    requestAnimationFrame(() => preview.classList.add('is-open'));
+    closeBtn.focus({preventScroll:true});
+  }
+
+  function closePreview(){
+    preview.classList.add('is-closing');
+    preview.classList.remove('is-open');
+    preview.setAttribute('aria-hidden','true');
+    document.body.style.overflow = '';
+    closingTimer = setTimeout(() => {
+      preview.classList.remove('is-closing');
+      image.style.backgroundImage = '';
+    }, 420);
+  }
+
+  galleryItems.forEach((item) => {
+    item.setAttribute('tabindex','0');
+    item.setAttribute('role','button');
+    item.setAttribute('aria-label', `Preview ${(item.querySelector('.cap')?.textContent || 'gallery image').trim()}`);
+    item.addEventListener('click', () => openPreview(item));
+    item.addEventListener('keydown', (event) => {
+      if(event.key === 'Enter' || event.key === ' '){
+        event.preventDefault();
+        openPreview(item);
+      }
+    });
+  });
+
+  closeBtn.addEventListener('click', closePreview);
+  preview.addEventListener('click', (event) => {
+    if(event.target === preview) closePreview();
+  });
+  card.addEventListener('click', (event) => event.stopPropagation());
+  document.addEventListener('keydown', (event) => {
+    if(event.key === 'Escape' && preview.classList.contains('is-open')) closePreview();
+  });
+})();
+</script>
+
 </body>
 </html>

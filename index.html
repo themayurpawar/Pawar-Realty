@@ -846,8 +846,83 @@ heroEl.addEventListener('click', (e) => {
   playWaterClickSound();
 });
 
+/* ---- ambient wind sweep: soft lake breeze from random directions every 3–6 seconds ---- */
+let windSweeps = [];
+let nextWindSweep = 0;
+const windDirections = [
+  0, Math.PI, Math.PI/2, -Math.PI/2,
+  Math.PI/4, -Math.PI/4, 3*Math.PI/4, -3*Math.PI/4
+];
+
+function launchWindSweep(ts){
+  const angle = windDirections[Math.floor(Math.random() * windDirections.length)] + (Math.random() - 0.5) * 0.22;
+  const dx = Math.cos(angle);
+  const dy = Math.sin(angle);
+  const px = -dy;
+  const py = dx;
+  const travel = Math.hypot(bufW, bufH) * (0.72 + Math.random() * 0.22);
+
+  // Keep the wind centered around the lake surface, but vary the origin so it never repeats mechanically.
+  const cx = bufW * (0.25 + Math.random() * 0.5);
+  const cy = bufH * (0.64 + Math.random() * 0.2);
+
+  // Mostly gentle, occasionally slightly stronger, sometimes almost invisible.
+  const mood = Math.random();
+  const strength = mood < 0.70 ? (0.28 + Math.random() * 0.12)
+                 : mood < 0.90 ? (0.21 + Math.random() * 0.09)
+                 : (0.16 + Math.random() * 0.08);
+
+  windSweeps.push({
+    start: ts,
+    duration: 2400 + Math.random() * 1100,
+    startX: cx - dx * travel * 0.5,
+    startY: cy - dy * travel * 0.5,
+    endX: cx + dx * travel * 0.5,
+    endY: cy + dy * travel * 0.5,
+    dx, dy, px, py,
+    wobble: Math.random() * Math.PI * 2,
+    strength,
+    trail: 4 + Math.floor(Math.random() * 3),
+    spacing: 6.5 + Math.random() * 4
+  });
+}
+
+function updateWindSweeps(ts){
+  if(!nextWindSweep){
+    nextWindSweep = ts + 3000 + Math.random() * 3000;
+  }
+  if(ts >= nextWindSweep){
+    launchWindSweep(ts);
+    nextWindSweep = ts + 3000 + Math.random() * 3000;
+  }
+
+  windSweeps = windSweeps.filter(wave => {
+    const p = (ts - wave.start) / wave.duration;
+    if(p >= 1) return false;
+
+    const eased = p < 0.5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2;
+    const fade = Math.sin(Math.PI * p);
+    const baseX = wave.startX + eased * (wave.endX - wave.startX);
+    const baseY = wave.startY + eased * (wave.endY - wave.startY);
+    const sideDrift = Math.sin(p * Math.PI * 2.4 + wave.wobble) * (1.0 + Math.random() * 0.15);
+
+    // Several feather-light touches create a moving wind line instead of a circular splash.
+    for(let i=0; i<wave.trail; i++){
+      const behind = i * wave.spacing;
+      const side = Math.sin(p * 8 + i * 0.8 + wave.wobble) * 1.1 + sideDrift;
+      const tx = baseX - wave.dx * behind + wave.px * side;
+      const ty = baseY - wave.dy * behind + wave.py * side;
+      const power = wave.strength * fade * (1 - i * 0.12);
+      if(power > 0.015) splash(tx, ty, power, 2);
+    }
+    return true;
+  });
+}
+
 function heroLoop(ts){
-  renderScene(ts||0);
+  ts = ts || 0;
+  renderScene(ts);
+  updateWindSweeps(ts);
   updateRipple();
   updateRipple();
   renderDistorted();
